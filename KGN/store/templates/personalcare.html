@@ -1,0 +1,705 @@
+<html lang="en">
+<head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KGN--{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/myscripts.js' }"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.js"></script>
+    <a id="button"></a>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
+
+<style>
+  body{
+    background-color: whitesmoke;
+  }
+
+#gradientanimation,button{
+  background: linear-gradient(-50deg, #23a6d5, #23d5ab,#037ade,#03e5b7,green,blue);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+
+}
+#foot{
+  background: linear-gradient(-50deg, #23a6d5, #23d5ab,#037ade,#03e5b7,green,blue);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+  *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    list-style: none;
+
+  }
+  
+  .wrapper .search_box{
+    width: 600px;
+    background: #fff;
+    border-radius: 10px;
+    height: 65px;
+    display: flex;
+    padding: 10px;
+    box-shadow: 0 8px 6px -10px #b3c6ff;
+  }
+  
+  .wrapper .search_box .dropdown{
+    width: 150px;
+    border-right: 2px solid #dde2f1;
+    color: #9fa3b1;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .wrapper .search_box .search_field{
+    width: 5000px;
+    height: 100%;
+    position: relative;
+  }
+  
+  .wrapper .search_box .search_field .input{
+    width: 100%;
+    height: 100%;
+    border: 0px;
+    font-size: 16px;
+    padding-left: 20px;
+    padding-right: 38px;
+    color: #6f768d;
+  }
+  
+</style>
+<!--slider featured product style starts-->
+<style>
+
+ 
+  div {
+      display: block;
+      position: relative;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box
+  }
+ 
+  .bbb_main_container {
+      background-color: whitesmoke;
+      padding: 30px
+  }
+ 
+  
+ 
+  .bbb_viewed_nav_container {
+      position: absolute;
+      right: -5px;
+      bottom: 14px
+  }
+ 
+  .bbb_viewed_nav {
+      display: inline-block;
+      cursor: pointer
+  }
+ 
+  .bbb_viewed_nav i {
+      color: white;
+
+      padding: 5px;
+      -webkit-transition: all 200ms ease;
+      -moz-transition: all 200ms ease;
+      -ms-transition: all 200ms ease;
+      -o-transition: all 200ms ease;
+      transition: all 200ms ease
+  }
+ 
+
+
+</style>
+<!--slider featured product style ends-->
+<!--pincode scripts starts-->
+<script>
+  document.addEventListener("DOMContentLoaded", function (event) {
+      function searchPin() {
+        let pin = document.getElementById("text").value;
+        $.getJSON("https://api.postalpincode.in/pincode/" + pin, function (data) {
+          createHTML(data);
+        })
+        function createHTML(data) {
+          var htmlElements = " ";
+          var msg = "";
+          msg += '<div id="msg">' + data[0].Message + '<span id="close">X</span></div>'
+          if (data[0].PostOffice && data[0].PostOffice.length) {
+            for (var i = 0; i < data[0].PostOffice.length; i++) {
+              if (data[0].PostOffice.length > 3) {
+                document.getElementById("mkslider").classList.add("sliders");
+              }
+              else {
+                document.getElementById("mkslider").removeAttribute("class");
+              }
+
+              htmlElements += 
+              '<div class="col-lg"><div class="card"><div class="list-group"&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp<class="pull-right">' + data[0].PostOffice[i].Name + 
+              '&nbsp&nbsp' + data[0].PostOffice[i].District + 
+                '&nbsp;&nbsp;(Delivery: available at location)' + '</div></div></div>'
+            }
+          }
+          else {
+            alert('Enter Valid pincode');
+          }
+          var htmlView = document.getElementById("mkslider");
+          htmlView.innerHTML = htmlElements;
+          createSlider();
+        }
+     
+      }
+  
+
+
+      document.getElementById("submit").addEventListener("click", searchPin);
+    });
+</script>
+<!--pincode scripts ends-->
+<!--slider featured product script starts-->
+<script>
+  $(document).ready(function()
+{
+
+
+if($('.bbb_viewed_slider').length)
+{
+var viewedSlider = $('.bbb_viewed_slider');
+
+viewedSlider.owlCarousel(
+{
+loop:true,
+margin:30,
+autoplay:true,
+autoplayTimeout:3000,
+nav:false,
+dots:false,
+responsive:
+{
+0:{items:1},
+575:{items:2},
+768:{items:3},
+991:{items:4},
+1199:{items:6}
+}
+});
+
+if($('.bbb_viewed_prev').length)
+{
+var prev = $('.bbb_viewed_prev');
+prev.on('click', function()
+{
+viewedSlider.trigger('prev.owl.carousel');
+});
+}
+
+if($('.bbb_viewed_next').length)
+{
+var next = $('.bbb_viewed_next');
+next.on('click', function()
+{
+viewedSlider.trigger('next.owl.carousel');
+});
+}
+}
+
+
+});
+</script>
+<!--slider featured product script ends-->
+
+<style>
+    /*----  Main Style  ----*/
+#cards_landscape_wrap-2{
+    text-align: left;
+    background: transparent;
+  }
+
+  #cards_landscape_wrap-2 a{
+    text-decoration: none;
+    outline: none;
+  }
+  #cards_landscape_wrap-2 .card-flyer {
+    border-radius: 6%;
+  }
+
+  #cards_landscape_wrap-2 .card-flyer .image-box img{
+    width: 100%;
+    height: 100%;
+  }
+  
+  #cards_landscape_wrap-2 .card-flyer .text-box{
+    text-align: center;
+  }
+  #cards_landscape_wrap-2 .card-flyer .text-box .text-container{
+    padding: 20px 12px;
+  }
+  #cards_landscape_wrap-2 .card-flyer{
+    background: #FFFFFF;
+    margin-top: 50px;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+    box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.40);
+  }
+  #cards_landscape_wrap-2 .card-flyer:hover{
+    background: #fff;
+    box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+    margin-top: 50px;
+  }
+  #cards_landscape_wrap-2 .card-flyer .text-box p{
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px; 
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #000000;
+  }
+  #cards_landscape_wrap-2 .card-flyer .text-box h6{
+    margin-top: 0px;
+    margin-bottom: 5px; 
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: black;
+  }
+</style>
+<style>
+    #button {
+        display: inline-block;
+        background-color: black;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        border-radius: 15px;
+        position: fixed;
+        bottom: 50px;
+        right: 30px;
+        transition: background-color .3s, 
+          opacity .5s, visibility .5s;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+      }
+      #button::after {
+        content: "\f077";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 2em;
+        line-height: 50px;
+        color: white
+      }
+      #button:hover {
+        cursor: pointer;
+        background-color: black;
+        color: whitesmoke;
+      }
+      #button.show {
+        opacity: 1;
+        visibility: visible;
+      }
+</style>
+<script>
+    var btn = $('#button');
+
+$(window).scroll(function() {
+  if ($(window).scrollTop() > 300) {
+    btn.addClass('show');
+  } else {
+    btn.removeClass('show');
+  }
+});
+
+btn.on('click', function(e) {
+  e.preventDefault();
+  $('html, body').animate({scrollTop:0}, '300');
+});
+
+
+</script>
+</head>
+<body>
+
+
+  {% load cart %}
+  {% load custom_filter %}
+
+
+   <!--endtest-->
+
+
+  <nav class="container-fluid" id="gradientanimation">
+
+    <!--  navbar starts -->
+   <div class="d-flex bd-highlight">
+    <!--  navbar img starts -->
+    
+      <div class="p-2 flex-fill bd-highlight"  style="margin-left: 80px;" >
+        <a class="navbar-brand"href="/"><img src="{% static 'img/kgnlogo5.png' %}" height="100px" width="250px"></a>
+      </div>
+    
+    <!--  navbar ends -->
+    <!--  navbar search bar starts -->
+      <div class="p-2 flex-fill bd-highlight" style="margin-top: 20px;">
+        <div class="wrapper"> 
+          <div class="search_box">
+            <div class="dropdown" style="margin-top: 10PX;">
+  
+        <h6 class="navbar-toggler" style="font-size: medium; color: #0CBAA6;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+         ENTER&nbsp;PINCODE
+        </h6>
+  
+            </div>
+              <div class="search_field">
+                <input type="text" class="input" placeholder="Search for medicine & wellness products...">
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--  navbar search bar ends -->
+    <!--  navbar upload cart and account starts -->
+      <div class="p-2 flex-fill bd-highlight" style="margin-top: 20px;margin-right: 10px">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+          <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+    
+                <a class="nav-link" aria-current="page" style="color: black;" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
+                  <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z"/>
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                </svg>&nbsp;UPLOAD</a>&nbsp;&nbsp;
+    
+                <a class="nav-link" href="/cartt" style="color: black;">
+                  <span class="btn btn-dark" style="padding:2;width:17">{{request.session.cart.keys|length}}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>&nbsp;CART
+                
+              </a>&nbsp;&nbsp;
+  
+                {% if request.user.is_authenticated %}
+
+                <a class="nav-link" href="/kgn/login" style="color: black;"><svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 2px;" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                </svg><span style="text-transform: uppercase;">&nbsp;{{request.user.get_username}}</span></a><h5 style="margin-top: 6px;">/</h5>
+  
+                  <a class="nav-link" href="/kgn/logout" style="color: black;">LOGOUT</a>
+                {% endif %}
+                {% if not request.user.is_authenticated %}
+             
+                <a class="nav-link" href="/login" style="color: black;"><svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 2px;" width="20" height="20" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                </svg>&nbsp;LOGIN</a><h5 style="margin-top: 6px;">/</h5>
+  
+                <a class="nav-link" href="/signup" style="color: black;">SIGNUP</a>
+                {% endif %}
+  
+             </div>
+            </div>
+          </div>
+        </nav>
+        </div>      
+      </div>
+    </div>
+    <!--  navbar upload cart and account ends -->
+  
+    <!--  navbar 2 starts -->
+      <div class="p-2 flex-fill bd-highlight" style="margin-left: 240px;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+          <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+    
+                <a class="nav-link" href="/" style="color: black;">&nbsp;HOME</a>&nbsp;&nbsp;
+  
+                <a class="nav-link" href="/medicine" style="color: black;">&nbsp;MEDICINES</a>&nbsp;&nbsp;
+    
+                <a class="nav-link" href="/healthCproducts" style="color: black;">&nbsp;HEALTHCARE PRODUCTS</a>&nbsp;&nbsp;
+    
+                <a class="nav-link" href="/CovidEssentials" style="color: black;">&nbsp;COVID ESSENTIALS</a>&nbsp;&nbsp;
+  
+  
+                <div class="dropdown">
+                  <a class="btn btn-transparent" href="/healthlibrary"  style="color: black;margin-top: 1px;">
+                    HEALTH CORNER
+                  </a>
+                </div>
+  
+                <div class="dropdown">
+                  <a class="btn btn-transparent dropdown-toggle" style="color: black;margin-top: 1px;" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    BEAUTY
+                  </a>
+                
+                  <ul class="dropdown-menu" style="align-items: center;" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/personalcare">PERSONAL CARE</a></li>
+                    <li><a class="dropdown-item" href="/healthCproducts">HAIR</a></li>
+                    <li><a class="dropdown-item" href="/personalcare">SKIN</a></li>
+                    <li><a class="dropdown-item" href="/makeup">MAKE-UP</a></li>
+                    <li><a class="dropdown-item" href="/MensGrooming">MEN'S GROOMING</a></li>
+                  </ul>
+                </div>
+  
+                <a class="nav-link" href="alogin" style="color: black;">&nbsp;A/LOGIN</a>&nbsp;&nbsp;
+  
+                <a class="nav-link" aria-current="page" href="/aboutus" style="color: black;" >&nbsp;ABOUT US</a>&nbsp;&nbsp;
+  
+                <a class="nav-link" href="/contactus" style="color: black;">&nbsp;CONTACT US</a>&nbsp;&nbsp;
+             </div>
+            </div>
+          </div>
+        </nav>
+        </div>      
+      </div>
+ <!--  navbar 2 ends -->
+</nav>
+
+<!-- OFF CANVAS PINCODE STARTS -->
+<div class="offcanvas offcanvas-end"  id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+  <button  type="button" class="btn btn-success" data-bs-dismiss="offcanvas" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-square" viewBox="0 0 16 16">
+    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+  </svg></button>
+
+  <div class="offcanvas-header" style="margin-top: 10px;">
+    <p class="offcanvas-title" id="offcanvasNavbarLabel" style="font-size: x-large;margin-left: 45px;color: black;">CHOOSE YOUR LOCATION</p>
+  </div>
+
+    <div class="d-flex flex-column bd-highlight mb-3">
+    <div class="container-fluid">
+      <form class="d-flex">
+        <input type="text" class="form-control" id="text" placeholder="Enter Pincode" maxlength="6"
+          onkeypress="event.charCode >= 48 && event.charCode <= 57"/>
+          <button id="submit" type="button" class="btn btn-success">Submit</button>
+      </form>
+<br>
+    <div><h6 id="mkslider" style="font-size: medium;"></h6></div>
+            
+    </div>
+    </div>
+    
+    <div class="d-flex flex-column bd-highlight mb-3">
+      <div class="container">
+        <img src="{% static 'img/kgnbike.jpg' %}" width="100px" style="margin-left: 135px;" height="100px" class="rounded-0" alt="...">
+        <div style="border-radius: 10px;border-style: groove;font-size: larger;text-align: center;letter-spacing: 1px;color: black;text-transform: uppercase;" >Serving more than 1,000 towns and cities in India.</div>
+      </div>
+     </div>
+
+  </div><!--canvas div ends-->   
+
+  </div>
+</nav>
+<!-- OFF CANVAS PINCODE ENDS -->
+
+<br><br>
+<!--pcb and sort by starts-->
+<div class="container">
+<div class="d-flex bd-highlight">
+    <div class="p-2 flex-grow-1 bd-highlight"><h1 style="font-weight: lighter;font-size: 70px;">Facial Kits</h1></div>
+    <div class="p-2 bd-highlight">
+
+        <!-- Large button groups (default and split) -->
+<div class="btn-group">
+    <H1 style="font-weight: lighter; margin-top: 25px;">SORT BY : &nbsp;</H1>
+
+    <div class="dropdown" style="margin-top: 25PX;">
+        <button class="btn btn-lg dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Popularity
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="htl3">High to Low</a></li>
+          <li><a class="dropdown-item" href="lth3">Low to High</a></li>
+          <li><a class="dropdown-item" href="#">Discount</a></li>
+        </ul>
+      </div>
+  </div>
+
+    </div>
+</div>
+</div>
+<!--pcb and sort by ends-->
+<!-- pcb Cards starts -->
+<div id="cards_landscape_wrap-2">
+  <div class="container">
+      <div class="row">
+
+
+        <div id='products' class="col-lg-12 mx-auto">
+          <div class="row mx-auto">
+            {% for product in products %}
+            
+            <div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
+              <div class="card-flyer">
+              <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+              <div class="card-body">
+                <p class="card-title">{{product.name}}</p>
+                <p class="card-text"><b>BEST PRICE : {{product.price|currency}}</b></p>
+                <p class="card-text"><b>MRP : <del>{{product.description|currency}}</del></b></p>
+                <!-- {{product | is_in_cart:request.session.cart }} -->
+              </div>
+            </div>
+              <div class="card-footer p-0 no-gutters">
+      
+                {% if product|is_in_cart:request.session.cart %}
+                <div class="row no-gutters">
+                  <form action="/#{{product.id}}" class="col-2 " method="post">
+                    {% csrf_token %}
+                    <input hidden type="text" name='product' value='{{product.id}}'>
+                    <input hidden type="text" name='remove' value='True'>
+                    <input type="submit" value=" - " class="btn btn-block btn-success border-right">
+                  </form>
+                  <div class="text-center col btn btn-success">{{product|cart_quantity:request.session.cart}} in Cart</div>
+                  <form action="/#{{product.id}}" class="col-2 " method="post">
+                    {% csrf_token %}
+                    <input hidden type="text" name='product' value='{{product.id}}'>
+                    <input type="submit" value=" + " class="btn btn-block btn-success border-left" style="margin-left: -17px;">
+                  </form>
+                </div>
+                {% else %}
+                <form action="/#{{product.id}}" method="POST" class="btn-block">
+                  {% csrf_token %}
+                  <input hidden type="text" name='product' value='{{product.id}}'>
+                  <input type="submit" class="float-right btn-md form-control btn btn-success"
+                    value="Add To Cart">
+                </form>
+                {% endif %}
+      
+              </div>
+      
+            </div>
+            
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+</div>
+</div>
+</div>
+<br><br>
+
+<!-- CFCI Cards Ends -->
+
+
+
+<!-- footer starts  -->
+  <footer class="container-fluid" id="foot">
+ <footer class="w-100 py-4 flex-shrink-0">
+  <div class="container py-4">
+      <div class="row gy-4 gx-5">
+          <div class="col-lg-4 col-md-6">
+              <h2 class="h1 text-black" align="center" style="font-size: larger;"><B>COMPANY</B><br></h2>
+              <ul class="list-unstyled text-muted">
+                <a class="nav-link" href="/kgn/aboutus" style="color: black;margin-left: 110px;">About KGN-PHARMACY</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Customers Speak</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Terms and Conditions</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Privacy Policy</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Career</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Fees and Payments Policy</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Return, Refund and Cancellation Policy</a>
+                <a class="nav-link" href="#" style="color: black;margin-left: 110px;">Contact Us</a>
+
+            </ul>
+          </div>
+          <div class="col-lg-2 col-md-6">
+           <span href="#" id="font1"  class="text-black mb-3" style="font-size: larger;margin-left: 25px;"><b>SHOPPING</b></span>
+              <ul class="list-unstyled text-muted">
+                <a class="nav-link" href="#" style="color: black">Browse by A-Z</a>
+                <a class="nav-link" href="#" style="color: black">Browse by&nbsp;Manufacturers</a>
+                <a class="nav-link" href="#" style="color: black">Health Articles</a>
+                <a class="nav-link" href="#" style="color: black">FAQs</a>
+
+              </ul>
+          </div>
+          <div class="col-lg-2 col-md-6" >
+            <span href="#" id="font1"  class="text-black mb-3" style="font-size: larger;margin-left: 25px;"><b>SOCIAL</b></span>
+              <ul class="list-unstyled text-muted">
+
+                <a class="nav-link" href="#" style="color: black">Patients Alike</a>
+                <a class="nav-link" href="#" style="color: black">Facebook</a>
+                <a class="nav-link" href="#" style="color: black">Twitter</a>
+                <a class="nav-link" href="#" style="color: black">LinkedIn</a>
+                <a class="nav-link" href="#" style="color: black">Youtube</a>
+
+              </ul>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <span href="#"   class="text-black mb-3" style="font-size: larger;margin-left: 40px;"><b>SUBSCRIBE TO OUR NEWSLETTER</b></span><BR><BR>
+            <span href="#"   class="text-black mb-3" style="color: black; font-size: medium;">Get a free subscription to our health and fitness tip and stay tuned to our latest offers
+            </span>
+              <form action="#"><BR>
+                  <div class="input-group mb-3">
+                      <input class="form-control" type="text" placeholder="Enter your email address"  aria-label="Recipient's username" aria-describedby="button-addon2">
+                      </span><button type="button" style="color: black;" class="btn btn-dark glow-on-hover">SUBSCRIBE</button>
+
+                  </div>
+              </form>
+          
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;
+          </div>
+      </div>
+      <BR>
+      <h5 style="color: black; font-size: larger;"  align="center">© 2022 KGN-PHARMACY. All Rights Reserved</h5>
+  </div>
+  <BR>
+  <div class="credit-cards" style="text-align: center; width: 100%">
+    <img height="40" src="{% static 'img/pay/pay1.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay2.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay3.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay4.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay5.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay6.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay7.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay8.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay9.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay10.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay11.png' %}"/>
+    <img height="40" src="{% static 'img/pay/pay12.png' %}"/>
+  </div>
+</footer>
+  </footer>
+<!-- footer ends  -->
+
+</body>
+</html>
